@@ -6,5 +6,10 @@
 </head>
 <body>
     {{ Titulo }}
+
+    <h2>Lista Horários</h2>
+    {% for i in lista_horarios %}
+        <p>{{ i.horario }}</p>
+    {% endfor %}
 </body>
 </html>
