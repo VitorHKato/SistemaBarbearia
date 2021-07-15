@@ -2,19 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Title</title>
 </head>
 <body>
-    {{ Titulo }}
+    <h2>Gerenciamento de Serviços</h2>
 
     <a href="{% url 'index' %}">Home</a>
     <a href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
     <a href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
     <a href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
 
-    <h2>Lista Horários</h2>
-    {% for i in lista_horarios %}
-        <p>{{ i.horario }}</p>
-    {% endfor %}
 </body>
 </html>

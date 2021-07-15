@@ -15,3 +15,30 @@ class Home(View):
         }
 
         return render(request=self.request, template_name='index.html', context=context)
+
+class GerenciarFuncionarios(View):
+    def get(self, *args, **kwargs):
+
+        context = {
+
+        }
+
+        return render(request=self.request, template_name='gerenciar_funcionarios.html', context=context)
+
+class GerenciarServicos(View):
+    def get(self, *args, **kwargs):
+
+        context = {
+
+        }
+
+        return render(request=self.request, template_name='gerenciar_servicos.html', context=context)
+
+
+class GerenciarProdutos(View):
+    def get(self, *args, **kwargs):
+        context = {
+
+        }
+
+        return render(request=self.request, template_name='gerenciar_produtos.html', context=context)
