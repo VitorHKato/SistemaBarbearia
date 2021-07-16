@@ -70,3 +70,44 @@ class CriarProduto(View):
         }
 
         return JsonResponse(context, safe=False)
+
+class DeletarProduto(View):
+    def post(self, *args, **kwargs):
+        id_produto = self.request.POST.get('id_produto')
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+
+        if produto:
+            produto.delete()
+            msg = 'Produto deletado.'
+        else:
+            msg = 'Produto não encontrado.'
+
+        return JsonResponse(msg, safe=False)
+
+class EditarProduto(View):
+    def post(self, *args, **kwargs):
+        id_produto = self.request.POST.get('id_produto')
+        nome = self.request.POST.get('nome')
+        grupo = self.request.POST.get('grupo')
+        quantidade = self.request.POST.get('quantidade')
+        subgrupo = self.request.POST.get('subgrupo')
+
+        filtros = {}
+
+        if nome:
+            filtros['nome'] = nome
+        if grupo:
+            filtros['grupo'] = grupo
+        if quantidade:
+            filtros['quantidade'] = quantidade
+        if subgrupo:
+            filtros['subgrupo'] = subgrupo
+
+        try:
+            core.models.Produto.objects.filter(pk=id_produto).first().update(filtros)
+            msg = 'Produto alterado com sucesso.'
+        except Exception as e:
+            msg = str(e)
+
+        return JsonResponse(msg, safe=False)
