@@ -23,7 +23,7 @@ class Funcionario(models.Model):
     nome = models.CharField(max_length=100, null=True)
     sobrenome = models.CharField(max_length=100, null=True)
     dt_nascimento = models.DateField(null=True)
-    situacao = models.CharField(max_length=100, null=True)      #Se está de férias, afastado, etc
+    situacao = models.CharField(max_length=100, null=True, default='TRABALHANDO')      #Se está de férias, afastado, etc
     salario_fixo = models.FloatField(null=True)
     status = models.BooleanField(default=True)
     cargo = models.CharField(max_length=100, null=True)

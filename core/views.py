@@ -10,11 +10,13 @@ class Home(View):
 
         lista_horarios = list(core.models.Horario.objects.filter(status=True))
         lista_servicos = list(core.models.Servicos.objects.filter(status=True))
+        lista_tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True))
 
         context = {
             'Titulo': "Bem vindo à Barber's!.",
             'lista_horarios': lista_horarios,
             'lista_servicos': lista_servicos,
+            'lista_tarefas_agendadas': lista_tarefas_agendadas,
         }
 
         return render(request=self.request, template_name='index.html', context=context)
