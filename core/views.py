@@ -9,13 +9,11 @@ class Home(View):
     def get(self, *args, **kwargs):
 
         lista_horarios = list(core.models.Horario.objects.filter(status=True))
-        lista_servicos = list(core.models.Servicos.objects.filter(status=True))
         lista_tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True))
 
         context = {
             'Titulo': "Bem vindo à Barber's!.",
             'lista_horarios': lista_horarios,
-            'lista_servicos': lista_servicos,
             'lista_tarefas_agendadas': lista_tarefas_agendadas,
         }
 

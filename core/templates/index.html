@@ -3,6 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+
+    <style>
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+    </style>
 </head>
 <body>
     {{ Titulo }}
@@ -13,8 +32,15 @@
     <a href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
 
     <h2>Lista Horários</h2>
-    {% for i in lista_horarios %}
-        <p>{{ i.horario }}</p>
-    {% endfor %}
+    <table>
+        <th>ID</th>
+        <th>Horário</th>
+        {% for i in lista_horarios %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.horario }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
