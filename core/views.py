@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
@@ -7,9 +9,10 @@ import core.models
 
 class Home(View):
     def get(self, *args, **kwargs):
+        data_atual = datetime.datetime.now().date()
 
         lista_horarios = list(core.models.Horario.objects.filter(status=True).order_by('horario'))
-        lista_tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True))
+        lista_tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True, data=data_atual).order_by('horario_inicio'))
 
         context = {
             'Titulo': "Bem vindo à Barber's!.",
