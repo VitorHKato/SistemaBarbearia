@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h2>Gerenciamento de Serviços</h2>
+{% extends 'base.html' %}
 
-    <a href="{% url 'index' %}">Home</a>
-    <a href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
-    <a href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
-    <a href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
-
-</body>
-</html>
+{% block conteudo %}
+    <p>GERENCIAR SERVIÇOS</p>
+{% endblock %}
