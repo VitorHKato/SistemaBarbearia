@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-    <h2>GERENCIAR SERVIÇOS</h2>
+    <h2>Serviços</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Valor</th>
+        <th>Comissão</th>
+        <th>Duração</th>
+
+        <tr>
+            {% for i in lista_servicos %}
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome }}</td>
+                <td>{{ i.valor }}</td>
+                <td>{{ i.comissao }}</td>
+                <td>{{ i.duracao }}</td>
+            {% endfor %}
+        </tr>
+    </table>
 {% endblock %}

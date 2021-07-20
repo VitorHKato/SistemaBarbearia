@@ -25,7 +25,25 @@ class Home(View):
 class GerenciarFuncionarios(View):
     def get(self, *args, **kwargs):
 
-        lista_funcionarios = core.models.Funcionario.objects.filter(status=True)
+        funcionarios = core.models.Funcionario.objects.filter(status=True)
+        data_atual = datetime.datetime.now().date()
+
+        lista_funcionarios = []
+        for i in funcionarios:
+            ultimo_salario = core.models.SalarioMensal.objects.filter(status=True, funcionario=i).last()
+            dias = data_atual - i.dt_nascimento
+            idade = dias.days / 365
+
+            a = {
+                'id': i.id,
+                'nome_completo': i.nome + ' ' + i.sobrenome,
+                'idade': int(idade),
+                'situacao': i.situacao,
+                'salario_fixo': i.salario_fixo,
+                'cargo': i.cargo,
+                'ultimo_salario': ultimo_salario.salario_total if ultimo_salario else '---',
+            }
+            lista_funcionarios.append(a)
 
         context = {
             'lista_funcionarios': lista_funcionarios,

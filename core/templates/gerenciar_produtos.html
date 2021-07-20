@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-    <h2>GERENCIAR PRODUTOS</h2>
+    <h2>Lista de Produtos</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Quantidade</th>
+        <th>Grupo</th>
+        <th>Subgrupo</th>
+
+        <tr>
+            {% for i in lista_produtos %}
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome }}</td>
+                <td>{{ i.quantidade }}</td>
+                <td>{{ i.grupo }}</td>
+                <td>{{ i.subgrupo }}</td>
+            {% endfor %}
+        </tr>
+    </table>
 {% endblock %}
