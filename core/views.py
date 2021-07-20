@@ -8,7 +8,7 @@ import core.models
 class Home(View):
     def get(self, *args, **kwargs):
 
-        lista_horarios = list(core.models.Horario.objects.filter(status=True))
+        lista_horarios = list(core.models.Horario.objects.filter(status=True).order_by('horario'))
         lista_tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True))
 
         context = {
