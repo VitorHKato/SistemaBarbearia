@@ -30,7 +30,8 @@ class Funcionario(models.Model):
 
 class SalarioMensal(models.Model):
     funcionario = models.ForeignKey(Funcionario, on_delete=DO_NOTHING)
-    comissao_total = models.FloatField(null=True)
+    # comissao_total = models.FloatField(null=True)
+    data_pagamento = models.DateField(null=True)
     salario_total = models.FloatField(null=True)
     status = models.BooleanField(default=True)
 

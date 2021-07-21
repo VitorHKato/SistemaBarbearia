@@ -9,7 +9,6 @@
         <th>Situação</th>
         <th>Salário Fixo</th>
         <th>Cargo</th>
-        <th>Último Salário</th>
 
         {% for i in lista_funcionarios %}
             <tr>
@@ -19,7 +18,22 @@
                 <td>{{ i.situacao }}</td>
                 <td>{{ i.salario_fixo }}</td>
                 <td>{{ i.cargo }}</td>
-                <td>{{ i.ultimo_salario }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Salários totais do último mês</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Data do pagamento</th>
+        <th>Salário total</th>
+        {% for i in lista_salarios_mensais %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome_completo }}</td>
+                <td>{{ i.data_pagamento }}</td>
+                <td>{{ i.salario_total }}</td>
             </tr>
         {% endfor %}
     </table>

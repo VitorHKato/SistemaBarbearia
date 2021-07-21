@@ -11,7 +11,6 @@ class Home(View):
     def get(self, *args, **kwargs):
         data_atual = datetime.datetime.now().date()
 
-        lista_horarios = list(core.models.Horario.objects.filter(status=True).order_by('horario'))
         tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True, data=data_atual).order_by('horario_inicio'))
 
         lista_tarefas_agendadas = []
@@ -23,13 +22,12 @@ class Home(View):
                 'horario_inicio': i.horario_inicio + 'h' if i.horario_inicio else '---',
                 'horario_fim': i.horario_fim + 'h' if i.horario_fim else '---',
                 'data': i.data if i.data else '---',
-                'realizado': i.realizado if i.realizado else '---',
+                'realizado': 'Sim' if i.realizado else 'Não',
             }
             lista_tarefas_agendadas.append(a)
 
         context = {
-            'Titulo': "Bem vindo à Barber's!.",
-            'lista_horarios': lista_horarios,
+            'Titulo': "Barbearia do Jow",
             'lista_tarefas_agendadas': lista_tarefas_agendadas,
         }
 
@@ -41,9 +39,12 @@ class GerenciarFuncionarios(View):
         funcionarios = core.models.Funcionario.objects.filter(status=True)
         data_atual = datetime.datetime.now().date()
 
+        #Salários pagos referente ao mês anterior
+        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, data_pagamento__month=data_atual.month))
+
         lista_funcionarios = []
         for i in funcionarios:
-            ultimo_salario = core.models.SalarioMensal.objects.filter(status=True, funcionario=i).last()
+            #ultimo_salario = core.models.SalarioMensal.objects.filter(status=True, funcionario=i).last()
             dias = data_atual - i.dt_nascimento
             idade = dias.days / 365
 
@@ -60,12 +61,29 @@ class GerenciarFuncionarios(View):
                 'situacao': i.situacao if i.situacao else '---',
                 'salario_fixo': 'R$ ' + str(i.salario_fixo) if i.salario_fixo else '---',
                 'cargo': i.cargo if i.cargo else '---',
-                'ultimo_salario': 'R$ ' + str(ultimo_salario.salario_total) if ultimo_salario else '---',
+                #'ultimo_salario': 'R$ ' + str(ultimo_salario.salario_total) if ultimo_salario else '---',
             }
             lista_funcionarios.append(a)
 
+        lista_salarios_mensais = []
+        for i in salarios_mensais:
+            nome_completo = '---'
+            if i.funcionario and i.funcionario.nome and i.funcionario.sobrenome:
+                nome_completo = i.funcionario.nome + ' ' + i.funcionario.sobrenome
+            elif i.funcionario.nome and not i.funcionario.sobrenome:
+                nome_completo = i.funcionario.nome
+
+            a = {
+                'id': i.id,
+                'funcionario_nome': nome_completo,
+                'data_pagamento': i.data_pagamento if i.data_pagamento else '---',
+                'salario_total': 'R$ ' + str(i.salario_total) if i.salario_total else '---',
+            }
+            lista_salarios_mensais.append(a)
+
         context = {
             'lista_funcionarios': lista_funcionarios,
+            'lista_salarios_mensais': lista_salarios_mensais,
         }
 
         return render(request=self.request, template_name='gerenciar_funcionarios.html', context=context)
