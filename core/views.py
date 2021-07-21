@@ -75,7 +75,7 @@ class GerenciarFuncionarios(View):
 
             a = {
                 'id': i.id,
-                'funcionario_nome': nome_completo,
+                'nome_completo': nome_completo,
                 'data_pagamento': i.data_pagamento if i.data_pagamento else '---',
                 'salario_total': 'R$ ' + str(i.salario_total) if i.salario_total else '---',
             }
