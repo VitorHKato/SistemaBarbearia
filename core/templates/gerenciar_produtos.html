@@ -9,14 +9,14 @@
         <th>Grupo</th>
         <th>Subgrupo</th>
 
-        <tr>
-            {% for i in lista_produtos %}
+        {% for i in lista_produtos %}
+            <tr>
                 <td>{{ i.id }}</td>
                 <td>{{ i.nome }}</td>
                 <td>{{ i.quantidade }}</td>
                 <td>{{ i.grupo }}</td>
                 <td>{{ i.subgrupo }}</td>
-            {% endfor %}
-        </tr>
+            </tr>
+        {% endfor %}
     </table>
 {% endblock %}

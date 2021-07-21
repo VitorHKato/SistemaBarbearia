@@ -9,14 +9,14 @@
         <th>Comissão</th>
         <th>Duração</th>
 
-        <tr>
-            {% for i in lista_servicos %}
+        {% for i in lista_servicos %}
+            <tr>
                 <td>{{ i.id }}</td>
                 <td>{{ i.nome }}</td>
                 <td>{{ i.valor }}</td>
                 <td>{{ i.comissao }}</td>
                 <td>{{ i.duracao }}</td>
-            {% endfor %}
-        </tr>
+            </tr>
+        {% endfor %}
     </table>
 {% endblock %}

@@ -12,7 +12,20 @@ class Home(View):
         data_atual = datetime.datetime.now().date()
 
         lista_horarios = list(core.models.Horario.objects.filter(status=True).order_by('horario'))
-        lista_tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True, data=data_atual).order_by('horario_inicio'))
+        tarefas_agendadas = list(core.models.TarefasAgendadas.objects.filter(status=True, data=data_atual).order_by('horario_inicio'))
+
+        lista_tarefas_agendadas = []
+        for i in tarefas_agendadas:
+            a = {
+                'id': i.id,
+                'funcionario_nome': i.funcionario.nome if i.funcionario and i.funcionario.nome else '---',
+                'servico_nome': i.servico.nome if i.servico and i.servico.nome else '---',
+                'horario_inicio': i.horario_inicio + 'h' if i.horario_inicio else '---',
+                'horario_fim': i.horario_fim + 'h' if i.horario_fim else '---',
+                'data': i.data if i.data else '---',
+                'realizado': i.realizado if i.realizado else '---',
+            }
+            lista_tarefas_agendadas.append(a)
 
         context = {
             'Titulo': "Bem vindo à Barber's!.",
@@ -34,14 +47,20 @@ class GerenciarFuncionarios(View):
             dias = data_atual - i.dt_nascimento
             idade = dias.days / 365
 
+            nome_completo = '---'
+            if i.nome and i.sobrenome:
+                nome_completo = i.nome + ' ' + i.sobrenome
+            elif i.nome and not i.sobrenome:
+                nome_completo = i.nome
+
             a = {
                 'id': i.id,
-                'nome_completo': i.nome + ' ' + i.sobrenome,
+                'nome_completo': nome_completo,
                 'idade': int(idade),
-                'situacao': i.situacao,
-                'salario_fixo': i.salario_fixo,
-                'cargo': i.cargo,
-                'ultimo_salario': ultimo_salario.salario_total if ultimo_salario else '---',
+                'situacao': i.situacao if i.situacao else '---',
+                'salario_fixo': 'R$ ' + str(i.salario_fixo) if i.salario_fixo else '---',
+                'cargo': i.cargo if i.cargo else '---',
+                'ultimo_salario': 'R$ ' + str(ultimo_salario.salario_total) if ultimo_salario else '---',
             }
             lista_funcionarios.append(a)
 
@@ -108,7 +127,7 @@ class EditarFuncionario(View):
             filtros['cargo'] = cargo
 
         try:
-            core.models.Funcionario.objects.filter(pk=id_funcionario).first().update(filtros)
+            core.models.Funcionario.objects.filter(pk=id_funcionario).update(**filtros)
             msg = 'Produto alterado com sucesso.'
         except Exception as e:
             msg = str(e)
@@ -118,7 +137,18 @@ class EditarFuncionario(View):
 class GerenciarServicos(View):
     def get(self, *args, **kwargs):
 
-        lista_servicos = core.models.Servicos.objects.filter(status=True)
+        servicos = core.models.Servicos.objects.filter(status=True)
+
+        lista_servicos = []
+        for i in servicos:
+            a = {
+                'id': i.id,
+                'nome': i.nome if i.nome else '---',
+                'valor': 'R$ ' + str(i.valor) if i.valor else '---',
+                'comissao': str(i.comissao) + '%' if i.comissao else '---',
+                'duracao': i.duracao + 'h' if i.duracao else '---',
+            }
+            lista_servicos.append(a)
 
         context = {
             'lista_servicos': lista_servicos,
@@ -184,7 +214,7 @@ class EditarServico(View):
             filtros['duracao'] = duracao
 
         try:
-            core.models.Servicos.objects.filter(pk=id_servico).first().update(filtros)
+            core.models.Servicos.objects.filter(pk=id_servico).update(**filtros)
             msg = 'Serviço alterado com sucesso.'
         except Exception as e:
             msg = str(e)
@@ -194,7 +224,18 @@ class EditarServico(View):
 class GerenciarProdutos(View):
     def get(self, *args, **kwargs):
 
-        lista_produtos = list(core.models.Produto.objects.filter(status=True))
+        produtos = list(core.models.Produto.objects.filter(status=True))
+
+        lista_produtos = []
+        for i in produtos:
+            a = {
+                'id': i.id,
+                'nome': i.nome if i.nome else '---',
+                'quantidade': i.quantidade if i.quantidade else '---',
+                'grupo': i.grupo if i.grupo else '---',
+                'subgrupo': i.subgrupo if i.subgrupo else '---'
+            }
+            lista_produtos.append(a)
 
         context = {
             'lista_produtos': lista_produtos,
@@ -260,7 +301,7 @@ class EditarProduto(View):
             filtros['subgrupo'] = subgrupo
 
         try:
-            core.models.Produto.objects.filter(pk=id_produto).first().update(filtros)
+            core.models.Produto.objects.filter(pk=id_produto).update(**filtros)
             msg = 'Produto alterado com sucesso.'
         except Exception as e:
             msg = str(e)

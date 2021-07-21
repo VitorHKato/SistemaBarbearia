@@ -11,16 +11,16 @@
         <th>Cargo</th>
         <th>Último Salário</th>
 
-        <tr>
-            {% for i in lista_funcionarios %}
-            <td>{{ i.id }}</td>
-            <td>{{ i.nome_completo }}</td>
-            <td>{{ i.idade }}</td>
-            <td>{{ i.situacao }}</td>
-            <td>{{ i.salario_fixo }}</td>
-            <td>{{ i.cargo }}</td>
-            <td>{{ i.ultimo_salario }}</td>
+        {% for i in lista_funcionarios %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome_completo }}</td>
+                <td>{{ i.idade }}</td>
+                <td>{{ i.situacao }}</td>
+                <td>{{ i.salario_fixo }}</td>
+                <td>{{ i.cargo }}</td>
+                <td>{{ i.ultimo_salario }}</td>
+            </tr>
         {% endfor %}
-        </tr>
     </table>
 {% endblock %}
