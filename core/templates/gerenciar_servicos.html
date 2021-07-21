@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h2>Gerenciamento de Serviços</h2>
+{% extends 'base.html' %}
 
-    <a href="{% url 'index' %}">Home</a>
-    <a href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
-    <a href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
-    <a href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
+{% block conteudo %}
+    <h2>Serviços</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Valor</th>
+        <th>Comissão</th>
+        <th>Duração</th>
 
-</body>
-</html>
+        {% for i in lista_servicos %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome }}</td>
+                <td>{{ i.valor }}</td>
+                <td>{{ i.comissao }}</td>
+                <td>{{ i.duracao }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

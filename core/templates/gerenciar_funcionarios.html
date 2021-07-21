@@ -1,16 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Barbearia</title>
-</head>
-<body>
-    <h2>Gerenciamento de Funcionários</h2>
+{% extends 'base.html' %}
 
-    <a href="{% url 'index' %}">Home</a>
-    <a href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
-    <a href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
-    <a href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
+{% block conteudo %}
+    <h2>Funcionários</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome Completo</th>
+        <th>Idade</th>
+        <th>Situação</th>
+        <th>Salário Fixo</th>
+        <th>Cargo</th>
 
-</body>
-</html>
+        {% for i in lista_funcionarios %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome_completo }}</td>
+                <td>{{ i.idade }}</td>
+                <td>{{ i.situacao }}</td>
+                <td>{{ i.salario_fixo }}</td>
+                <td>{{ i.cargo }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Salários totais do último mês</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Data do pagamento</th>
+        <th>Salário total</th>
+        {% for i in lista_salarios_mensais %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome_completo }}</td>
+                <td>{{ i.data_pagamento }}</td>
+                <td>{{ i.salario_total }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h2>Gerenciamento de Produtos</h2>
+{% extends 'base.html' %}
 
-    <a href="{% url 'index' %}">Home</a>
-    <a href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
-    <a href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
-    <a href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
+{% block conteudo %}
+    <h2>Lista de Produtos</h2>
+    <table>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Quantidade</th>
+        <th>Grupo</th>
+        <th>Subgrupo</th>
 
-</body>
-</html>
+        {% for i in lista_produtos %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nome }}</td>
+                <td>{{ i.quantidade }}</td>
+                <td>{{ i.grupo }}</td>
+                <td>{{ i.subgrupo }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
