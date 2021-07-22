@@ -37,4 +37,67 @@
             </tr>
         {% endfor %}
     </table>
+
+    <form method="post" id="formCadastroFuncionario" name="formCadastroFuncionario">
+        {% csrf_token %}
+        <label for="nomeFuncionario">Nome: </label>
+        <input type="text" required="" maxlength="150" id="nomeFuncionario" name="nomeFuncionario">
+        <label for="sobrenomeFuncionario">Sobrenome: </label>
+        <input type="text" required="" maxlength="200" id="sobrenomeFuncionario" name="sobrenomeFuncionario"><br><br>
+        <label for="dataNascimento">Data de nascimento: </label>
+        <input type="date" required="" id="dataNascimentoFuncionario" name="dataNascimentoFuncionario">
+        <label for="situacaoFuncionario">Situação: </label>
+        <select id="situacaoFuncionario" name="situacaoFuncionario">
+            {% for i in situacoes %}
+                <option value= {{ i }}>{{ i }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="salariofixoFuncionario">Salário fixo: </label>
+        <input type="number" step="100" id="salariofixoFuncionario" name="salariofixoFuncionario">
+        <label for="cargoFuncionario">Cargo: </label>
+        <input type="text" id="cargoFuncionario" name="cargoFuncionario"><br><br>
+        <button type="button" onclick="$('#formCadastroFuncionario').submit()" id="enviarDadosFuncionario">Enviar</button>
+    </form>
+
+    {% block javascript %}
+        <script>
+            $('#formCadastroFuncionario').on('submit', function (e){
+                e.preventDefault()
+                nome = $('#nomeFuncionario').val();
+                sobrenome = $('#sobrenomeFuncionario').val();
+
+                date = new Date($('#dataNascimentoFuncionario').val());
+                dia = date.getDate();
+                mes = date.getMonth();
+                ano = date.getFullYear();
+                dataNascimento = [dia, mes, ano].join('/');
+
+                situacao = $('#situacaoFuncionario').val();
+                salarioFixo = $('#salariofixoFuncionario').val();
+                cargo = $('#cargoFuncionario').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'criar_funcionario' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'nome': nome,
+                        'sobrenome': sobrenome,
+                        'dt_nascimento': dataNascimento,
+                        'situacao': situacao,
+                        'salario_fixo': salarioFixo,
+                        'cargo': cargo,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}
 {% endblock %}
