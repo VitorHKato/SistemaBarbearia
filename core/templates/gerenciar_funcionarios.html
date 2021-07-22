@@ -38,7 +38,8 @@
         {% endfor %}
     </table>
 
-    <form method="post" id="formCadastroFuncionario" name="formCadastroFuncionario">
+    <div class="cadastroFuncionario">
+        <form method="post" id="formCadastroFuncionario" name="formCadastroFuncionario">
         {% csrf_token %}
         <label for="nomeFuncionario">Nome: </label>
         <input type="text" required="" maxlength="150" id="nomeFuncionario" name="nomeFuncionario">
@@ -52,17 +53,19 @@
                 <option value= {{ i }}>{{ i }}</option>
             {% endfor %}
         </select><br><br>
-        <label for="salariofixoFuncionario">Salário fixo: </label>
+        <label for="salariofixoFuncionario">Salário fixo: R$</label>
         <input type="number" step="100" id="salariofixoFuncionario" name="salariofixoFuncionario">
         <label for="cargoFuncionario">Cargo: </label>
         <input type="text" id="cargoFuncionario" name="cargoFuncionario"><br><br>
         <button type="button" onclick="$('#formCadastroFuncionario').submit()" id="enviarDadosFuncionario">Enviar</button>
     </form>
+    </div>
 
     {% block javascript %}
         <script>
             $('#formCadastroFuncionario').on('submit', function (e){
-                e.preventDefault()
+                e.preventDefault();
+                e.stopImmediatePropagation();
                 nome = $('#nomeFuncionario').val();
                 sobrenome = $('#sobrenomeFuncionario').val();
 
@@ -90,7 +93,8 @@
                     },
                     dataType: 'json',
                     success: function (context){
-                        toastr.success(context.msg);
+                        location.reload();
+                        //toastr.success(context.msg);
                     },
                     error: function (context){
                         toastr.error(context.msg)

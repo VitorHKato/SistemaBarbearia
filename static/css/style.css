@@ -51,3 +51,13 @@ tr:nth-child(even) {
 body {
     padding-top: 65px;
 }
+
+.cadastroFuncionario {
+    margin: auto;
+    width: 50%;
+    background-color: #999999;
+    border: 5px solid #2c3034;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 200px;
+}

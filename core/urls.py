@@ -8,7 +8,8 @@ urlpatterns = [
     #path('', Login.as_view(), name='login')
 
     path('valida_nome', ValidaNome.as_view(), name='valida_nome'),
-    path('home', Home.as_view(), name='index'),
+
+    path('', Home.as_view(), name='index'),
 
     path('gerenciar_produtos', GerenciarProdutos.as_view(), name='gerenciar_produtos'),
     path('criar_produto', CriarProduto.as_view(), name='criar_produto'),
