@@ -6,6 +6,15 @@ from django.views import View
 
 import core.models
 
+class ValidaNome(View):
+    def get(self, *args, **kwargs):
+        nome = self.request.GET.get('nome')
+
+        context = {
+            'nome': 'Nome enviado: ' + nome,
+        }
+
+        return JsonResponse(context)
 
 class Home(View):
     def get(self, *args, **kwargs):

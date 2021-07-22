@@ -24,4 +24,39 @@
             {% endfor %}
         </table>
     </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="fname">Primeiro nome: </label>
+        <input type="text" required="" maxlength="100" id="fname" name="fname"><br><br>
+        <label for="lname">Sobrenome: </label>
+        <input type="text" id="lname" name="lname"><br><br>
+        <button type="submit">Enviar</button>
+    </form>
+
+    {% block javascript %}
+    <script>
+        $(document).ready(function()
+        {
+            alert('Página carregada')
+        });
+    </script>
+    <script>
+        $('#fname').change(function () {
+            var nome = $(this).val();
+
+            $.ajax({
+                url: 'valida_nome',
+                data: {
+                    'nome': nome
+                },
+                dataType: 'json',
+                success: function (context){
+                    alert(context.nome);
+                }
+            })
+        });
+    </script>
+
+    {% endblock %}
 {% endblock %}
