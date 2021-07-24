@@ -1,26 +1,64 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-    <h2>Serviços de Hoje</h2>
-    <table>
-        <th>ID</th>
-        <th>Funcionário</th>
-        <th>Serviço</th>
-        <th>Início</th>
-        <th>Fim</th>
-        <th>Data</th>
-        <th>Realizado?</th>
-        {% for i in lista_tarefas_agendadas %}
-        <tr>
-            <td>{{ i.id }}</td>
-            <td>{{ i.funcionario_nome }}</td>
-            <td>{{ i.servico_nome }}</td>
-            <td>{{ i.horario_inicio }}</td>
-            <td>{{ i.horario_fim }}</td>
-            <td>{{ i.data }}</td>
-            <td>{{ i.realizado }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>Serviços de Hoje</h2>
+        <table>
+            <th>ID</th>
+            <th>Funcionário</th>
+            <th>Serviço</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Data</th>
+            <th>Realizado?</th>
+            {% for i in lista_tarefas_agendadas %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.funcionario_nome }}</td>
+                <td>{{ i.servico_nome }}</td>
+                <td>{{ i.horario_inicio }}</td>
+                <td>{{ i.horario_fim }}</td>
+                <td>{{ i.data }}</td>
+                <td>{{ i.realizado }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 
+    <form method="post">
+        {% csrf_token %}
+        <label for="fname">Primeiro nome: </label>
+        <input type="text" required="" maxlength="100" id="fname" name="fname"><br><br>
+        <label for="lname">Sobrenome: </label>
+        <input type="text" id="lname" name="lname"><br><br>
+        <button type="submit">Enviar</button>
+    </form>
+
+    {% block javascript %}
+    <!--
+    <script>
+        $(document).ready(function() {
+            alert('Página carregada')
+        });
+    </script>
+    -->
+    <script>
+        $('#fname').change(function (e) {
+            e.stopImmediatePropagation();
+            var nome = $(this).val();
+
+            $.ajax({
+                url: 'valida_nome',
+                data: {
+                    'nome': nome
+                },
+                dataType: 'json',
+                success: function (context){
+                    alert(context.nome);
+                }
+            })
+        });
+    </script>
+
+    {% endblock %}
 {% endblock %}

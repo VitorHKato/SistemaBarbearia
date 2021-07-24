@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{% static 'fa/css/all.min.css' %}">
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script type="text/javascript" src="../../static/js/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery/toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '../../static/js/jquery/toastr.min.css' %}">
 
     <meta charset="UTF-8">
     <title>Barbearia do Jow</title>
@@ -14,34 +17,45 @@
 </head>
 <body>
     {% block header %}
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">
-                 <img src="/static/img/barber_icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                    Home
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="header">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                         <img src="/static/img/barber_icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                            Home
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'gerenciar_funcionarios' %}">Gerenciamento de Funcionários</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'gerenciar_servicos' %}">Gerenciamento de Serviços</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'gerenciar_produtos' %}">Gerenciamento de Produtos</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </nav>
     {% endblock %}
 
     {% block conteudo %}
+    {% endblock %}
+
+    {% block footer %}
+        <div class="footer">
+            <p class="versao">Versão 1.0</p>
+        </div>
+    {% endblock %}
+
+    {% block javascript %}
     {% endblock %}
 </body>
 </html>

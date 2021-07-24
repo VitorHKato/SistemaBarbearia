@@ -6,6 +6,15 @@ from django.views import View
 
 import core.models
 
+class ValidaNome(View):
+    def get(self, *args, **kwargs):
+        nome = self.request.GET.get('nome')
+
+        context = {
+            'nome': 'Nome enviado: ' + nome,
+        }
+
+        return JsonResponse(context)
 
 class Home(View):
     def get(self, *args, **kwargs):
@@ -35,7 +44,6 @@ class Home(View):
 
 class GerenciarFuncionarios(View):
     def get(self, *args, **kwargs):
-
         funcionarios = core.models.Funcionario.objects.filter(status=True)
         data_atual = datetime.datetime.now().date()
 
@@ -45,8 +53,8 @@ class GerenciarFuncionarios(View):
         lista_funcionarios = []
         for i in funcionarios:
             #ultimo_salario = core.models.SalarioMensal.objects.filter(status=True, funcionario=i).last()
-            dias = data_atual - i.dt_nascimento
-            idade = dias.days / 365
+            dias = data_atual - i.dt_nascimento if i.dt_nascimento else 0
+            idade = dias.days / 365 if isinstance(dias, datetime.timedelta) else 0
 
             nome_completo = '---'
             if i.nome and i.sobrenome:
@@ -81,9 +89,12 @@ class GerenciarFuncionarios(View):
             }
             lista_salarios_mensais.append(a)
 
+        situacoes = ['TRABALHANDO', 'FÉRIAS', 'AFASTADO', 'LICENÇA']
+
         context = {
             'lista_funcionarios': lista_funcionarios,
             'lista_salarios_mensais': lista_salarios_mensais,
+            'situacoes': situacoes,
         }
 
         return render(request=self.request, template_name='gerenciar_funcionarios.html', context=context)
@@ -94,13 +105,22 @@ class CriarFuncionario(View):
         sobrenome = self.request.POST.get('sobrenome')
         dt_nascimento = self.request.POST.get('dt_nascimento')
         salario_fixo = self.request.POST.get('salario_fixo')
+        situacao = self.request.POST.get('situacao')
         cargo = self.request.POST.get('cargo')
+
+        data = dt_nascimento.split('/')
+
+        try:
+            data_nascimento = datetime.date(year=int(data[2]), month=int(data[1]), day=int(data[0]))
+        except:
+            data_nascimento = None
 
         try:
             core.models.Funcionario.objects.create(
                 nome=nome,
                 sobrenome=sobrenome,
-                dt_nascimento=dt_nascimento,
+                dt_nascimento=data_nascimento,
+                situacao=situacao,
                 salario_fixo=salario_fixo,
                 cargo=cargo,
             ).save()
