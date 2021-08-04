@@ -70,8 +70,8 @@
                 sobrenome = $('#sobrenomeFuncionario').val();
 
                 date = new Date($('#dataNascimentoFuncionario').val());
-                dia = date.getDate();
-                mes = date.getMonth();
+                dia = date.getDate() + 1;
+                mes = date.getMonth() + 1;
                 ano = date.getFullYear();
                 dataNascimento = [dia, mes, ano].join('/');
 

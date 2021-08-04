@@ -41,5 +41,5 @@ class TarefasAgendadas(models.Model):
     horario_inicio = models.CharField(max_length=50, null=True)
     horario_fim = models.CharField(max_length=50, null=True)
     data = models.DateField(null=True)
-    realizado = models.BooleanField(default=True)
+    realizado = models.BooleanField(default=False)
     status = models.BooleanField(default=True)

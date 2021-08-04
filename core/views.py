@@ -345,3 +345,71 @@ class EditarProduto(View):
             msg = str(e)
 
         return JsonResponse(msg, safe=False)
+
+class GerenciarTarefas(View):
+    def get(self, *args, **kwargs):
+
+        lista_servicos = list(core.models.Servicos.objects.filter(status=True).values('id', 'nome'))
+
+        funcionarios = core.models.Funcionario.objects.filter(status=True, situacao='TRABALHANDO')
+
+        lista_horarios = list(core.models.Horario.objects.filter(status=True).order_by('horario'))
+
+        lista_funcionarios = []
+        for i in funcionarios:
+            nome_completo = '---'
+            if i.nome and i.sobrenome:
+                nome_completo = i.nome + ' ' + i.sobrenome
+            elif i.nome and not i.sobrenome:
+                nome_completo = i.nome
+            nome_completo = nome_completo + ' (' + i.cargo + ')'
+            a = {
+                'id': i.id,
+                'nome_completo': nome_completo,
+            }
+            lista_funcionarios.append(a)
+
+        context = {
+            'lista_servicos': lista_servicos,
+            'lista_funcionarios': lista_funcionarios,
+            'lista_horarios': lista_horarios,
+        }
+
+        return render(request=self.request, template_name='gerenciar_tarefas.html', context=context)
+
+class AgendarTarefa(View):
+    def post(self, *args, **kwargs):
+        id_funcionario = self.request.POST.get('id_funcionario')
+        id_servico = self.request.POST.get('id_servico')
+        data_tarefa = self.request.POST.get('dataTarefa')
+        hora_inicio = self.request.POST.get('horaInicio')
+        hora_fim = self.request.POST.get('horaFim')
+
+        funcionario = core.models.Funcionario.objects.filter(id=id_funcionario).first()
+        servico = core.models.Servicos.objects.filter(id=id_servico).first()
+
+        data = data_tarefa.split('/')
+
+        try:
+            data_tarefa = datetime.date(year=int(data[2]), month=int(data[1]), day=int(data[0]))
+        except:
+            data_tarefa = None
+
+        try:
+            core.models.TarefasAgendadas.objects.create(
+                funcionario=funcionario,
+                servico=servico,
+                horario_inicio=hora_inicio,
+                horario_fim=hora_fim,
+                data=data_tarefa,
+            ).save()
+
+            msg = 'Tarefa agendada criada com sucesso!'
+        except Exception as e:
+            msg = 'Erro ao criar tarefa agendada.'
+
+        context = {
+            'msg': msg
+        }
+
+        return JsonResponse(context, safe=False)
