@@ -381,6 +381,7 @@ class AgendarTarefa(View):
     def post(self, *args, **kwargs):
         id_funcionario = self.request.POST.get('id_funcionario')
         id_servico = self.request.POST.get('id_servico')
+        #TODO: Ver pq a data chega errada
         data_tarefa = self.request.POST.get('dataTarefa')
         hora_inicio = self.request.POST.get('horaInicio')
         hora_fim = self.request.POST.get('horaFim')
