@@ -27,6 +27,7 @@ class Home(View):
             a = {
                 'id': i.id,
                 'funcionario_nome': i.funcionario.nome if i.funcionario and i.funcionario.nome else '---',
+                'cliente_nome': i.cliente if i.cliente else '---',
                 'servico_nome': i.servico.nome if i.servico and i.servico.nome else '---',
                 'horario_inicio': i.horario_inicio + 'h' if i.horario_inicio else '---',
                 'horario_fim': i.horario_fim + 'h' if i.horario_fim else '---',
@@ -274,7 +275,8 @@ class GerenciarProdutos(View):
                 'nome': i.nome if i.nome else '---',
                 'quantidade': i.quantidade if i.quantidade else '---',
                 'grupo': i.grupo if i.grupo else '---',
-                'subgrupo': i.subgrupo if i.subgrupo else '---'
+                'subgrupo': i.subgrupo if i.subgrupo else '---',
+                'preco': 'R$ ' + str(i.preco) if i.preco else '---',
             }
             lista_produtos.append(a)
 
@@ -388,6 +390,7 @@ class AgendarTarefa(View):
         data_tarefa = self.request.POST.get('dataTarefa')
         hora_inicio = self.request.POST.get('horaInicio')
         hora_fim = self.request.POST.get('horaFim')
+        nome_cliente = self.request.POST.get('nome_cliente')
 
         funcionario = core.models.Funcionario.objects.filter(id=id_funcionario).first()
         servico = core.models.Servicos.objects.filter(id=id_servico).first()
@@ -406,6 +409,7 @@ class AgendarTarefa(View):
                 horario_inicio=hora_inicio,
                 horario_fim=hora_fim,
                 data=data_tarefa,
+                cliente=nome_cliente,
             ).save()
 
             msg = 'Tarefa agendada criada com sucesso!'

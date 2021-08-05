@@ -30,6 +30,9 @@
             {% endfor %}
         </select><br><br>
 
+        <label for="nomeCliente">Cliente: </label>
+        <input type="text" required="" maxlength="150" id="nomeCliente" name="nomeCliente">
+
         <label for="servico">Serviço: </label>
         <select id="servico" name="servico">
             {% for i in lista_servicos %}
@@ -56,6 +59,7 @@
                 horaFim = $('#horaFim').val();
                 id_funcionario = $('#funcionario').val();
                 id_servico = $('#servico').val();
+                nome_cliente = $('#nomeCliente').val();
 
                 $.ajax({
                     type: 'POST',
@@ -67,6 +71,7 @@
                         'dataTarefa': dataTarefa,
                         'horaInicio': horaInicio,
                         'horaFim': horaFim,
+                        'nome_cliente': nome_cliente,
                     },
                     dataType: 'json',
                     success: function (context){

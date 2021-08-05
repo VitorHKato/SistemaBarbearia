@@ -8,6 +8,7 @@
         <th>Quantidade</th>
         <th>Grupo</th>
         <th>Subgrupo</th>
+        <th>Preço</th>
 
         {% for i in lista_produtos %}
             <tr>
@@ -16,6 +17,7 @@
                 <td>{{ i.quantidade }}</td>
                 <td>{{ i.grupo }}</td>
                 <td>{{ i.subgrupo }}</td>
+                <td>{{ i.preco }}</td>
             </tr>
         {% endfor %}
     </table>
