@@ -1,6 +1,30 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+    <h2>Cadastrar Funcionário</h2>
+    <div class="cadastroFuncionario">
+        <form method="post" id="formCadastroFuncionario" name="formCadastroFuncionario">
+        {% csrf_token %}
+        <label for="nomeFuncionario">Nome: </label>
+        <input type="text" required="" maxlength="150" id="nomeFuncionario" name="nomeFuncionario">
+        <label for="sobrenomeFuncionario">Sobrenome: </label>
+        <input type="text" required="" maxlength="200" id="sobrenomeFuncionario" name="sobrenomeFuncionario"><br><br>
+        <label for="dataNascimento">Data de nascimento: </label>
+        <input type="date" required="" id="dataNascimentoFuncionario" name="dataNascimentoFuncionario">
+        <label for="situacaoFuncionario">Situação: </label>
+        <select id="situacaoFuncionario" name="situacaoFuncionario">
+            {% for i in situacoes %}
+                <option value= {{ i }}>{{ i }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="salariofixoFuncionario">Salário fixo: R$</label>
+        <input type="number" step="100" id="salariofixoFuncionario" name="salariofixoFuncionario">
+        <label for="cargoFuncionario">Cargo: </label>
+        <input type="text" id="cargoFuncionario" name="cargoFuncionario"><br><br>
+        <button type="button" onclick="$('#formCadastroFuncionario').submit()" id="enviarDadosFuncionario">Enviar</button>
+    </form>
+    </div>
+
     <h2>Funcionários</h2>
     <table>
         <th>ID</th>
@@ -37,30 +61,6 @@
             </tr>
         {% endfor %}
     </table>
-
-    <h2>Cadastrar Funcionário</h2>
-    <div class="cadastroFuncionario">
-        <form method="post" id="formCadastroFuncionario" name="formCadastroFuncionario">
-        {% csrf_token %}
-        <label for="nomeFuncionario">Nome: </label>
-        <input type="text" required="" maxlength="150" id="nomeFuncionario" name="nomeFuncionario">
-        <label for="sobrenomeFuncionario">Sobrenome: </label>
-        <input type="text" required="" maxlength="200" id="sobrenomeFuncionario" name="sobrenomeFuncionario"><br><br>
-        <label for="dataNascimento">Data de nascimento: </label>
-        <input type="date" required="" id="dataNascimentoFuncionario" name="dataNascimentoFuncionario">
-        <label for="situacaoFuncionario">Situação: </label>
-        <select id="situacaoFuncionario" name="situacaoFuncionario">
-            {% for i in situacoes %}
-                <option value= {{ i }}>{{ i }}</option>
-            {% endfor %}
-        </select><br><br>
-        <label for="salariofixoFuncionario">Salário fixo: R$</label>
-        <input type="number" step="100" id="salariofixoFuncionario" name="salariofixoFuncionario">
-        <label for="cargoFuncionario">Cargo: </label>
-        <input type="text" id="cargoFuncionario" name="cargoFuncionario"><br><br>
-        <button type="button" onclick="$('#formCadastroFuncionario').submit()" id="enviarDadosFuncionario">Enviar</button>
-    </form>
-    </div>
 
     {% block javascript %}
         <script>

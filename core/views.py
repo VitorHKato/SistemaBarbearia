@@ -47,8 +47,11 @@ class GerenciarFuncionarios(View):
         funcionarios = core.models.Funcionario.objects.filter(status=True)
         data_atual = datetime.datetime.now().date()
 
+        data_string = str(data_atual).split('-')
+        anomes = data_string[0] + data_string[1]
+
         #Salários pagos referente ao mês anterior
-        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, data_pagamento__month=data_atual.month))
+        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, anomes=anomes))
 
         lista_funcionarios = []
         for i in funcionarios:
@@ -84,8 +87,8 @@ class GerenciarFuncionarios(View):
             a = {
                 'id': i.id,
                 'nome_completo': nome_completo,
-                'data_pagamento': i.data_pagamento if i.data_pagamento else '---',
-                'salario_total': 'R$ ' + str(i.salario_total) if i.salario_total else '---',
+                'data_pagamento': data_string[1] + '/' + data_string[0],
+                'salario_total': 'R$ ' + str(i.comissao_total) if i.comissao_total else '---',
             }
             lista_salarios_mensais.append(a)
 
