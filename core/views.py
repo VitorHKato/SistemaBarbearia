@@ -421,3 +421,5 @@ class AgendarTarefa(View):
         }
 
         return JsonResponse(context, safe=False)
+
+#TODO: Ao agendar tarefa, colocar na função para incrementar a comissao do funcionário e da renda mensal
