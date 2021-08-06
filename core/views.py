@@ -1,10 +1,26 @@
 import datetime
 
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
 import core.models
+
+class Login(View):
+    def get(self, *args, **kwargs):
+
+        return render(request=self.request, template_name='login.html')
+
+class ValidarLogin(View):
+    def post(self, *args, **kwargs):
+        usuario = self.request.POST.get('usuario')
+        senha = self.request.POST.get('senha')
+
+        if core.models.Usuario.objects.filter(usuario=usuario, senha=senha).exists():
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return {'msg': 'Usuário inválido.'}
 
 class ValidaNome(View):
     def get(self, *args, **kwargs):

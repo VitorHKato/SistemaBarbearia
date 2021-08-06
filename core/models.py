@@ -31,6 +31,7 @@ class Funcionario(models.Model):
 
 class Usuario(models.Model):
     funcionario = models.ForeignKey(Funcionario, on_delete=DO_NOTHING, null=True)
+    usuario = models.CharField(max_length=50)
     senha = models.CharField(max_length=50)
     status = models.BooleanField(default=True)
 

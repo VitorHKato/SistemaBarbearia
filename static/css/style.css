@@ -71,3 +71,15 @@ body {
     text-align: center;
     margin-bottom: 200px;
 }
+
+.login{
+    margin: auto;
+    width: 50%;
+    height: 100px;
+    background-color: #999999;
+    border: 5px solid #2c3034;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 200px;
+}
+
