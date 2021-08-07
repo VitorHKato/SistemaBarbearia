@@ -282,7 +282,7 @@ class EditarServico(View):
 class GerenciarProdutos(View):
     def get(self, *args, **kwargs):
 
-        produtos = list(core.models.Produto.objects.filter(status=True))
+        produtos = list(core.models.Produto.objects.filter(status=True).order_by('pk'))
 
         lista_produtos = []
         for i in produtos:
@@ -366,6 +366,34 @@ class EditarProduto(View):
             msg = 'Produto alterado com sucesso.'
         except Exception as e:
             msg = str(e)
+
+        return JsonResponse(msg, safe=False)
+
+class RemoverQuantidadeProduto(View):
+    def post(self, *args, **kwargs):
+        id_produto = self.request.POST.get('id_produto')
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+        if produto:
+            produto.quantidade = produto.quantidade - 1
+            produto.save()
+            msg = 'Removido um produto.'
+        else:
+            msg = 'Não foi possível encontrar o produto.'
+
+        return JsonResponse(msg, safe=False)
+
+class AdicionarQuantidadeProduto(View):
+    def post(self, *args, **kwargs):
+        id_produto = self.request.POST.get('id_produto')
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+        if produto:
+            produto.quantidade = produto.quantidade + 1
+            produto.save()
+            msg = 'Adicionado um produto.'
+        else:
+            msg = 'Não foi possível encontrar o produto.'
 
         return JsonResponse(msg, safe=False)
 

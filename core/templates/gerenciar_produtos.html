@@ -32,6 +32,8 @@
         <th>Grupo</th>
         <th>Subgrupo</th>
         <th>Preço</th>
+        <th>Adicionar Quantidade</th>
+        <th>Retirar Quantidade</th>
 
         {% for i in lista_produtos %}
             <tr>
@@ -41,6 +43,12 @@
                 <td>{{ i.grupo }}</td>
                 <td>{{ i.subgrupo }}</td>
                 <td>{{ i.preco }}</td>
+                <td>
+                    <button type="button" onclick="$('#AdicionarQtdProduto').submit()" id="AdicionarQtdProduto" value={{ i.id }}>+</button>
+                </td>
+                <td>
+                    <button type="button" onclick="$('#RemoverQtdProduto').submit()" id="RemoverQtdProduto" value={{ i.id }}>-</button>
+                </td>
             </tr>
         {% endfor %}
     </table>
@@ -66,6 +74,50 @@
                         'grupo': grupoProduto,
                         'subgrupo': subgrupoProduto,
                         'preco': precoProduto,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        //toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+
+            $('#RemoverQtdProduto').on('submit', function (e){
+                e.stopImmediatePropagation();
+                var idProduto = $('#RemoverQtdProduto').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'remover_qtd_produto' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'id_produto': idProduto,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        //toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+
+            $('#AdicionarQtdProduto').on('submit', function (e){
+                e.stopImmediatePropagation();
+                var idProduto = $('#AdicionarQtdProduto').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'adicionar_qtd_produto' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'id_produto': idProduto,
                     },
                     dataType: 'json',
                     success: function (context){

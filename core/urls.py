@@ -2,7 +2,8 @@ from django.urls import path
 
 from core.views import Home, GerenciarFuncionarios, GerenciarServicos, GerenciarProdutos, CriarProduto, DeletarProduto, \
     EditarProduto, CriarServico, EditarServico, DeletarServico, CriarFuncionario, DeletarFuncionario, EditarFuncionario, \
-    ValidaNome, GerenciarTarefas, AgendarTarefa, Login, ValidarLogin
+    ValidaNome, GerenciarTarefas, AgendarTarefa, Login, ValidarLogin, RemoverQuantidadeProduto, \
+    AdicionarQuantidadeProduto
 
 urlpatterns = [
     # path('', Login.as_view(), name='login'),
@@ -17,6 +18,8 @@ urlpatterns = [
     path('criar_produto', CriarProduto.as_view(), name='criar_produto'),
     path('deletar_produto', DeletarProduto.as_view(), name='deletar_produto'),
     path('editar_produto', EditarProduto.as_view(), name='editar_produto'),
+    path('remover_qtd_produto', RemoverQuantidadeProduto.as_view(), name='remover_qtd_produto'),
+    path('adicionar_qtd_produto', AdicionarQuantidadeProduto.as_view(), name='adicionar_qtd_produto'),
 
     path('gerenciar_servicos', GerenciarServicos.as_view(), name='gerenciar_servicos'),
     path('criar_servico', CriarServico.as_view(), name='criar_servico'),
