@@ -5,12 +5,13 @@ from core.views import Home, GerenciarFuncionarios, GerenciarServicos, Gerenciar
     ValidaNome, GerenciarTarefas, AgendarTarefa, Login, ValidarLogin
 
 urlpatterns = [
-    path('', Login.as_view(), name='login'),
-    path('validar_login', ValidarLogin.as_view(), name='validar_login'),
+    # path('', Login.as_view(), name='login'),
+    # path('validar_login', ValidarLogin.as_view(), name='validar_login'),
 
     # path('valida_nome', ValidaNome.as_view(), name='valida_nome'),
 
-    path('home', Home.as_view(), name='index'),
+    path('', Home.as_view(), name='index'),
+    # path('redirect', Redirect.as_view(), name='redirect'),
 
     path('gerenciar_produtos', GerenciarProdutos.as_view(), name='gerenciar_produtos'),
     path('criar_produto', CriarProduto.as_view(), name='criar_produto'),

@@ -18,7 +18,7 @@ class ValidarLogin(View):
         senha = self.request.POST.get('senha')
 
         if core.models.Usuario.objects.filter(usuario=usuario, senha=senha).exists():
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
         else:
             return {'msg': 'Usuário inválido.'}
 
@@ -308,6 +308,7 @@ class CriarProduto(View):
         quantidade = self.request.POST.get('quantidade')
         grupo = self.request.POST.get('grupo')
         subgrupo = self.request.POST.get('subgrupo')
+        preco = self.request.POST.get('preco')
 
         try:
             core.models.Produto.objects.create(
@@ -315,6 +316,7 @@ class CriarProduto(View):
                 quantidade=quantidade,
                 grupo=grupo,
                 subgrupo=subgrupo,
+                preco=preco,
             ).save()
 
             msg = 'Produto criado com sucesso.'

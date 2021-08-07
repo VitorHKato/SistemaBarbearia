@@ -1,6 +1,29 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+    <h2>Cadastrar Produto</h2>
+    <div class="cadastroProduto">
+        <form method="post" id="cadastroProduto" name="cadastroProduto">
+        {% csrf_token %}
+        <label for="nomeProduto">Nome: </label>
+        <input type="text" required="" maxlength="150" id="nomeProduto" name="nomeProduto">
+
+        <label for="quantidadeProduto">Quantidade: </label>
+        <input type="number" required="" maxlength="50" id="quantidadeProduto" name="quantidadeProduto"><br><br>
+
+        <label for="grupoProduto">Grupo: </label>
+        <input type="text" required="" id="grupoProduto" name="grupoProduto">
+
+        <label for="subgrupoProduto">Subgrupo: </label>
+        <input type="text" required="" id="subgrupoProduto" name="subgrupoProduto">
+
+        <label for="precoProduto">Preço: </label>
+        <input type="number" required="" id="precoProduto" name="precoProduto">
+
+        <button type="button" onclick="$('#cadastroProduto').submit()" id="enviarDadosProduto">Enviar</button>
+    </form>
+    </div>
+
     <h2>Lista de Produtos</h2>
     <table>
         <th>ID</th>
@@ -21,4 +44,40 @@
             </tr>
         {% endfor %}
     </table>
+
+    {% block javascript %}
+        <script>
+            $('#cadastroProduto').on('submit', function (e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                nomeProduto = $('#nomeProduto').val();
+                quantidadeProduto = $('#quantidadeProduto').val();
+                grupoProduto = $('#grupoProduto').val();
+                subgrupoProduto = $('#subgrupoProduto').val();
+                precoProduto = $('#precoProduto').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'criar_produto' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'nome': nomeProduto,
+                        'quantidade': quantidadeProduto,
+                        'grupo': grupoProduto,
+                        'subgrupo': subgrupoProduto,
+                        'preco': precoProduto,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        //toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}
 {% endblock %}
