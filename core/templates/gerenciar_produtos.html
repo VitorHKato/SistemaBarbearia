@@ -44,10 +44,10 @@
                 <td>{{ i.subgrupo }}</td>
                 <td>{{ i.preco }}</td>
                 <td>
-                    <button type="button" class="btn btn-dark" onclick="$('#AdicionarQtdProduto').submit()" id="AdicionarQtdProduto" value={{ i.id }}>+</button>
+                    <button type="button" class="btn btn-dark" onclick="adicionarQtdProduto({{ i.id }})" id="idProduto" value={{ i.id }}>+</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-dark" onclick="$('#RemoverQtdProduto').submit()" id="RemoverQtdProduto" value={{ i.id }}>-</button>
+                    <button type="button" class="btn btn-dark" onclick="removerQtdProduto({{ i.id }})" id="idProduto" value={{ i.id }}>-</button>
                 </td>
             </tr>
         {% endfor %}
@@ -86,10 +86,8 @@
                 });
             });
 
-            $('#RemoverQtdProduto').on('submit', function (e){
-                e.stopImmediatePropagation();
-                var idProduto = $('#RemoverQtdProduto').val();
-
+            function removerQtdProduto(idProduto)
+            {
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'remover_qtd_produto' %}',
@@ -106,12 +104,10 @@
                         toastr.error(context.msg)
                     }
                 });
-            });
+            }
 
-            $('#AdicionarQtdProduto').on('submit', function (e){
-                e.stopImmediatePropagation();
-                var idProduto = $('#AdicionarQtdProduto').val();
-
+            function adicionarQtdProduto(idProduto)
+            {
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'adicionar_qtd_produto' %}',
@@ -128,7 +124,52 @@
                         toastr.error(context.msg)
                     }
                 });
-            });
+            }
+
+            {#$('#RemoverQtdProduto').on('submit', function (e, id){#}
+            {#    e.stopImmediatePropagation();#}
+            {#    var idProduto = $('#idProduto').val();#}
+            {#    console.log(idProduto)#}
+            {##}
+            {#    $.ajax({#}
+            {#        type: 'POST',#}
+            {#        url: '{% url 'remover_qtd_produto' %}',#}
+            {#        data: {#}
+            {#            'csrfmiddlewaretoken': '{{ csrf_token }}',#}
+            {#            'id_produto': idProduto,#}
+            {#        },#}
+            {#        dataType: 'json',#}
+            {#        success: function (context){#}
+            {#            location.reload();#}
+            {#            //toastr.success(context.msg);#}
+            {#        },#}
+            {#        error: function (context){#}
+            {#            toastr.error(context.msg)#}
+            {#        }#}
+            {#    });#}
+            {#});#}
+            {##}
+            {#$('#AdicionarQtdProduto').on('submit', function (e){#}
+            {#    e.stopImmediatePropagation();#}
+            {#    var idProduto = $('#idProduto').val();#}
+            {##}
+            {#    $.ajax({#}
+            {#        type: 'POST',#}
+            {#        url: '{% url 'adicionar_qtd_produto' %}',#}
+            {#        data: {#}
+            {#            'csrfmiddlewaretoken': '{{ csrf_token }}',#}
+            {#            'id_produto': idProduto,#}
+            {#        },#}
+            {#        dataType: 'json',#}
+            {#        success: function (context){#}
+            {#            location.reload();#}
+            {#            //toastr.success(context.msg);#}
+            {#        },#}
+            {#        error: function (context){#}
+            {#            toastr.error(context.msg)#}
+            {#        }#}
+            {#    });#}
+            {#});#}
         </script>
 
     {% endblock %}
