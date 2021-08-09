@@ -1,10 +1,26 @@
 import datetime
 
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
 import core.models
+
+class Login(View):
+    def get(self, *args, **kwargs):
+
+        return render(request=self.request, template_name='login.html')
+
+class ValidarLogin(View):
+    def post(self, *args, **kwargs):
+        usuario = self.request.POST.get('usuario')
+        senha = self.request.POST.get('senha')
+
+        if core.models.Usuario.objects.filter(usuario=usuario, senha=senha).exists():
+            return redirect('index')
+        else:
+            return {'msg': 'Usuário inválido.'}
 
 class ValidaNome(View):
     def get(self, *args, **kwargs):
@@ -27,6 +43,7 @@ class Home(View):
             a = {
                 'id': i.id,
                 'funcionario_nome': i.funcionario.nome if i.funcionario and i.funcionario.nome else '---',
+                'cliente_nome': i.cliente if i.cliente else '---',
                 'servico_nome': i.servico.nome if i.servico and i.servico.nome else '---',
                 'horario_inicio': i.horario_inicio + 'h' if i.horario_inicio else '---',
                 'horario_fim': i.horario_fim + 'h' if i.horario_fim else '---',
@@ -47,8 +64,11 @@ class GerenciarFuncionarios(View):
         funcionarios = core.models.Funcionario.objects.filter(status=True)
         data_atual = datetime.datetime.now().date()
 
+        data_string = str(data_atual).split('-')
+        anomes = data_string[0] + data_string[1]
+
         #Salários pagos referente ao mês anterior
-        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, data_pagamento__month=data_atual.month))
+        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, anomes=anomes))
 
         lista_funcionarios = []
         for i in funcionarios:
@@ -84,8 +104,8 @@ class GerenciarFuncionarios(View):
             a = {
                 'id': i.id,
                 'nome_completo': nome_completo,
-                'data_pagamento': i.data_pagamento if i.data_pagamento else '---',
-                'salario_total': 'R$ ' + str(i.salario_total) if i.salario_total else '---',
+                'data_pagamento': data_string[1] + '/' + data_string[0],
+                'salario_total': 'R$ ' + str(i.comissao_total) if i.comissao_total else '---',
             }
             lista_salarios_mensais.append(a)
 
@@ -262,7 +282,7 @@ class EditarServico(View):
 class GerenciarProdutos(View):
     def get(self, *args, **kwargs):
 
-        produtos = list(core.models.Produto.objects.filter(status=True))
+        produtos = list(core.models.Produto.objects.filter(status=True).order_by('pk'))
 
         lista_produtos = []
         for i in produtos:
@@ -271,7 +291,8 @@ class GerenciarProdutos(View):
                 'nome': i.nome if i.nome else '---',
                 'quantidade': i.quantidade if i.quantidade else '---',
                 'grupo': i.grupo if i.grupo else '---',
-                'subgrupo': i.subgrupo if i.subgrupo else '---'
+                'subgrupo': i.subgrupo if i.subgrupo else '---',
+                'preco': 'R$ ' + str(i.preco) if i.preco else '---',
             }
             lista_produtos.append(a)
 
@@ -287,6 +308,7 @@ class CriarProduto(View):
         quantidade = self.request.POST.get('quantidade')
         grupo = self.request.POST.get('grupo')
         subgrupo = self.request.POST.get('subgrupo')
+        preco = self.request.POST.get('preco')
 
         try:
             core.models.Produto.objects.create(
@@ -294,6 +316,7 @@ class CriarProduto(View):
                 quantidade=quantidade,
                 grupo=grupo,
                 subgrupo=subgrupo,
+                preco=preco,
             ).save()
 
             msg = 'Produto criado com sucesso.'
@@ -346,6 +369,34 @@ class EditarProduto(View):
 
         return JsonResponse(msg, safe=False)
 
+class RemoverQuantidadeProduto(View):
+    def post(self, *args, **kwargs):
+        id_produto = self.request.POST.get('id_produto')
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+        if produto:
+            produto.quantidade = produto.quantidade - 1
+            produto.save()
+            msg = 'Removido um produto.'
+        else:
+            msg = 'Não foi possível encontrar o produto.'
+
+        return JsonResponse(msg, safe=False)
+
+class AdicionarQuantidadeProduto(View):
+    def post(self, *args, **kwargs):
+        id_produto = self.request.POST.get('id_produto')
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+        if produto:
+            produto.quantidade = produto.quantidade + 1
+            produto.save()
+            msg = 'Adicionado um produto.'
+        else:
+            msg = 'Não foi possível encontrar o produto.'
+
+        return JsonResponse(msg, safe=False)
+
 class GerenciarTarefas(View):
     def get(self, *args, **kwargs):
 
@@ -385,6 +436,7 @@ class AgendarTarefa(View):
         data_tarefa = self.request.POST.get('dataTarefa')
         hora_inicio = self.request.POST.get('horaInicio')
         hora_fim = self.request.POST.get('horaFim')
+        nome_cliente = self.request.POST.get('nome_cliente')
 
         funcionario = core.models.Funcionario.objects.filter(id=id_funcionario).first()
         servico = core.models.Servicos.objects.filter(id=id_servico).first()
@@ -403,6 +455,7 @@ class AgendarTarefa(View):
                 horario_inicio=hora_inicio,
                 horario_fim=hora_fim,
                 data=data_tarefa,
+                cliente=nome_cliente,
             ).save()
 
             msg = 'Tarefa agendada criada com sucesso!'
@@ -414,3 +467,5 @@ class AgendarTarefa(View):
         }
 
         return JsonResponse(context, safe=False)
+
+#TODO: Ao agendar tarefa, colocar na função para incrementar a comissao do funcionário e da renda mensal

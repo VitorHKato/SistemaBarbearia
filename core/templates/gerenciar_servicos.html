@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+    <h2>Cadastrar Serviço</h2>
+    <div class="cadastroServico">
+        <form method="post" id="cadastroServico" name="cadastroServico">
+        {% csrf_token %}
+        <label for="nomeServico">Nome: </label>
+        <input type="text" required="" maxlength="150" id="nomeServico" name="nomeServico">
+
+        <label for="valorServico">Valor: </label>
+        <input type="number" required="" maxlength="50" id="valorServico" name="valorServico"><br><br>
+
+        <label for="comissaoServico">Comissão: </label>
+        <input type="number" required="" id="comissaoServico" name="comissaoServico">
+
+        <label for="duracaoServico">Duração: </label>
+        <input type="text" required="" id="duracaoServico" name="duracaoServico">
+
+        <button type="button" onclick="$('#cadastroServico').submit()" id="enviarDadosServico">Enviar</button>
+    </form>
+    </div>
+
     <h2>Serviços</h2>
     <table>
         <th>ID</th>
@@ -19,4 +39,38 @@
             </tr>
         {% endfor %}
     </table>
+
+    {% block javascript %}
+        <script>
+            $('#cadastroServico').on('submit', function (e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                nomeServico = $('#nomeServico').val();
+                valorServico = $('#valorServico').val();
+                comissaoServico = $('#comissaoServico').val();
+                duracaoServico = $('#duracaoServico').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'criar_servico' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'nome': nomeServico,
+                        'valor': valorServico,
+                        'comissao': comissaoServico,
+                        'duracao': duracaoServico,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        //toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}
 {% endblock %}

@@ -1,0 +1,82 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fa/css/all.min.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script type="text/javascript" src="../../static/js/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery/toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '../../static/js/jquery/toastr.min.css' %}">
+
+    <meta charset="UTF-8">
+    <title>Barbearia do Jow</title>
+</head>
+<body>
+    {% block header %}
+        <div class="header">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <h1></h1>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    {% endblock %}
+
+    {% block content %}
+    <div class="login" style="vertical-align: middle">
+        <form method="post" id="formLogin" name="formLogin">
+            {% csrf_token %}
+            <label for="usuario">Usuário: </label>
+            <input type="text" required="" maxlength="50" id="usuario" name="usuario">
+            <label for="senha">Senha: </label>
+            <input type="password" required="" maxlength="50" id="senha" name="senha">
+            <button type="button" onclick="$('#formLogin').submit()" id="enviarDadosLogin">Logar</button>
+        </form>
+    </div>
+    {% endblock %}
+
+    {% block footer %}
+        <div class="footer">
+            <p class="versao">Versão 1.0</p>
+        </div>
+    {% endblock %}
+
+    {% block javascript %}
+        <script>
+            $('#formLogin').on('submit', function (e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                usuario = $('#usuario').val();
+                senha = $('#senha').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'validar_login' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'usuario': usuario,
+                        'senha': senha,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}
+</body>
+</html>
