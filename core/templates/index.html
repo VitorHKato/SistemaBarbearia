@@ -11,6 +11,7 @@
             <th>Fim</th>
             <th>Data</th>
             <th>Realizado?</th>
+            <th>Avaliar Tarefa</th>
             {% for i in lista_tarefas_agendadas %}
             <tr>
                 <td>{{ i.id }}</td>
@@ -20,11 +21,15 @@
                 <td>{{ i.horario_fim }}</td>
                 <td>{{ i.data }}</td>
                 <td>{{ i.realizado }}</td>
+                <td>
+                    <button type="button">Realizar tarefa</button>
+                </td>
             </tr>
             {% endfor %}
         </table>
     </div>
 
+    {% comment %}
     <form method="post">
         {% csrf_token %}
         <label for="fname">Primeiro nome: </label>
@@ -33,6 +38,7 @@
         <input type="text" id="lname" name="lname"><br><br>
         <button type="submit">Enviar</button>
     </form>
+    {% endcomment %}
 
     {% block javascript %}
     <!--

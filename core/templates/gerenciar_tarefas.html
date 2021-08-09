@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+    <h2>Agendar Tarefa</h2>
+
+    <div class="agendarTarefa">
+        <form method="post" id="formformAgendarTarefa" name="formAgendarTarefa">
+        {% csrf_token %}
+        <label for="dataTarefa">Data</label>
+        <input type="date" required="" id="dataTarefa" name="dataTarefa">
+
+        <label for="horaInicio">Hora de Início: </label>
+        <select id="horaInicio" name="horaInicio">
+            {% for i in lista_horarios %}
+                <option value= {{ i.horario }}>{{ i.horario }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="horaFim">Hora de Término: </label>
+        <select id="horaFim" name="horaFim">
+            {% for i in lista_horarios %}
+                <option value= {{ i.horario }}>{{ i.horario }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="funcionario">Funcionário: </label>
+        <select id="funcionario" name="funcionario">
+            {% for i in lista_funcionarios %}
+                <option value= {{ i.id }}>{{ i.nome_completo }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="servico">Serviço: </label>
+        <select id="servico" name="servico">
+            {% for i in lista_servicos %}
+                <option value= {{ i.id }}>{{ i.nome }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="button" onclick="$('#formformAgendarTarefa').submit()" id="enviarDadosFuncionario">Enviar</button>
+    </form>
+    </div>
+
+    {% block javascript %}
+        <script>
+            $('#formformAgendarTarefa').on('submit', function (e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                date = new Date($('#dataTarefa').val());
+                dia = date.getDate() + 1;
+                mes = date.getMonth() + 1;
+                ano = date.getFullYear();
+                dataTarefa = [dia, mes, ano].join('/');
+
+                horaInicio = $('#horaInicio').val();
+                horaFim = $('#horaFim').val();
+                id_funcionario = $('#funcionario').val();
+                id_servico = $('#servico').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'agendar_tarefa' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'id_funcionario': id_funcionario,
+                        'id_servico': id_servico,
+                        'dataTarefa': dataTarefa,
+                        'horaInicio': horaInicio,
+                        'horaFim': horaFim,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        //toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+        </script>
+    {% endblock %}
+
+{% endblock %}
