@@ -33,6 +33,7 @@
         <th>Situação</th>
         <th>Salário Fixo</th>
         <th>Cargo</th>
+        <th>Alterar situação</th>
 
         {% for i in lista_funcionarios %}
             <tr>
@@ -42,9 +43,54 @@
                 <td>{{ i.situacao }}</td>
                 <td>{{ i.salario_fixo }}</td>
                 <td>{{ i.cargo }}</td>
+                <td>
+                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalAlterarSituacao">Alterar</button>
+                </td>
             </tr>
         {% endfor %}
     </table>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="modal fade" id="modalAlterarSituacao" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Editar situação do funcionário</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="cadastroFuncionario">
+                                    <form method="post" id="formCadastroFuncionario" name="formCadastroFuncionario">
+                                    {% csrf_token %}
+                                    <label for="nomeFuncionario">Nome: </label>
+                                    <input type="text" required="" maxlength="150" id="nomeFuncionario" name="nomeFuncionario">
+                                    <label for="sobrenomeFuncionario">Sobrenome: </label>
+                                    <input type="text" required="" maxlength="200" id="sobrenomeFuncionario" name="sobrenomeFuncionario"><br><br>
+                                    <label for="dataNascimento">Data de nascimento: </label>
+                                    <input type="date" required="" id="dataNascimentoFuncionario" name="dataNascimentoFuncionario">
+                                    <label for="situacaoFuncionario">Situação: </label>
+                                    <select id="situacaoFuncionario" name="situacaoFuncionario">
+                                        {% for i in situacoes %}
+                                            <option value= {{ i }}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    <label for="salariofixoFuncionario">Salário fixo: R$</label>
+                                    <input type="number" step="100" id="salariofixoFuncionario" name="salariofixoFuncionario">
+                                    <label for="cargoFuncionario">Cargo: </label>
+                                    <input type="text" id="cargoFuncionario" name="cargoFuncionario"><br><br>
+                                    <button type="button" onclick="$('#formCadastroFuncionario').submit()" id="enviarDadosFuncionario">Enviar</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h2>Salários totais do último mês</h2>
     <table>

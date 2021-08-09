@@ -44,10 +44,10 @@
                 <td>{{ i.subgrupo }}</td>
                 <td>{{ i.preco }}</td>
                 <td>
-                    <button type="button" onclick="$('#AdicionarQtdProduto').submit()" id="AdicionarQtdProduto" value={{ i.id }}>+</button>
+                    <button type="button" class="btn btn-dark" onclick="$('#AdicionarQtdProduto').submit()" id="AdicionarQtdProduto" value={{ i.id }}>+</button>
                 </td>
                 <td>
-                    <button type="button" onclick="$('#RemoverQtdProduto').submit()" id="RemoverQtdProduto" value={{ i.id }}>-</button>
+                    <button type="button" class="btn btn-dark" onclick="$('#RemoverQtdProduto').submit()" id="RemoverQtdProduto" value={{ i.id }}>-</button>
                 </td>
             </tr>
         {% endfor %}
