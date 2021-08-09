@@ -3,7 +3,7 @@ from django.urls import path
 from core.views import Home, GerenciarFuncionarios, GerenciarServicos, GerenciarProdutos, CriarProduto, DeletarProduto, \
     EditarProduto, CriarServico, EditarServico, DeletarServico, CriarFuncionario, DeletarFuncionario, EditarFuncionario, \
     ValidaNome, GerenciarTarefas, AgendarTarefa, Login, ValidarLogin, RemoverQuantidadeProduto, \
-    AdicionarQuantidadeProduto
+    AdicionarQuantidadeProduto, ViewEditarFuncionario, AvaliarTarefa
 
 urlpatterns = [
     # path('', Login.as_view(), name='login'),
@@ -30,8 +30,10 @@ urlpatterns = [
     path('criar_funcionario', CriarFuncionario.as_view(), name='criar_funcionario'),
     path('deletar_funcionario', DeletarFuncionario.as_view(), name='deletar_funcionario'),
     path('editar_funcionario', EditarFuncionario.as_view(), name='editar_funcionario'),
+    path('view_editar_funcionario/<int:id_produto>', ViewEditarFuncionario.as_view(), name='view_editar_funcionario'),
 
     path('gerenciar_tarefas', GerenciarTarefas.as_view(), name='gerenciar_tarefas'),
-    path('agendar_tarefa', AgendarTarefa.as_view(), name='agendar_tarefa')
+    path('agendar_tarefa', AgendarTarefa.as_view(), name='agendar_tarefa'),
+    path('avaliar_tarefa', AvaliarTarefa.as_view(), name='avaliar_tarefa'),
 
 ]

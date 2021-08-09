@@ -49,12 +49,14 @@ class Home(View):
                 'horario_fim': i.horario_fim + 'h' if i.horario_fim else '---',
                 'data': i.data if i.data else '---',
                 'realizado': 'Sim' if i.realizado else 'Não',
+                'realizado_checkbox': i.realizado,
             }
             lista_tarefas_agendadas.append(a)
 
         context = {
             'Titulo': "Barbearia do Jow",
             'lista_tarefas_agendadas': lista_tarefas_agendadas,
+            'true': True,
         }
 
         return render(request=self.request, template_name='index.html', context=context)
@@ -191,6 +193,16 @@ class EditarFuncionario(View):
             msg = str(e)
 
         return JsonResponse(msg, safe=False)
+
+class ViewEditarFuncionario(View):
+    def get(self, *args, **kwargs):
+        id_produto = self.kwargs['id_produto']
+
+        context = {
+
+        }
+
+        return render(request=self.request, template_name='gerenciar_tarefas.html', context=context)
 
 class GerenciarServicos(View):
     def get(self, *args, **kwargs):
@@ -467,5 +479,25 @@ class AgendarTarefa(View):
         }
 
         return JsonResponse(context, safe=False)
+
+class AvaliarTarefa(View):
+    def post(self, *args, **kwargs):
+        id_tarefa = self.request.POST.get('id_tarefa')
+        avaliacao = self.request.POST.get('avaliacao')
+
+        tarefa = core.models.TarefasAgendadas.objects.filter(pk=id_tarefa).first()
+
+        if tarefa:
+            if avaliacao == 'true':
+                tarefa.realizado = True
+            else:
+                tarefa.realizado = False
+            tarefa.save()
+
+            msg = 'Tarefa avaliada com sucesso.'
+        else:
+            msg = 'Tarefa não encontrada.'
+
+        return JsonResponse(msg, safe=False)
 
 #TODO: Ao agendar tarefa, colocar na função para incrementar a comissao do funcionário e da renda mensal
