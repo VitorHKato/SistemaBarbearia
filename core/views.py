@@ -305,9 +305,9 @@ class EditarServico(View):
 
 class ViewEditarServico(View):
     def get(self, *args, **kwargs):
-        id_produto = self.kwargs['id_servico']
+        id_servico = self.kwargs['id_servico']
 
-        servico = core.models.Servicos.objects.filter(pk=id_produto).first()
+        servico = core.models.Servicos.objects.filter(pk=id_servico).first()
 
         context = {
             'servico': servico,
@@ -385,6 +385,7 @@ class EditarProduto(View):
         grupo = self.request.POST.get('grupo')
         quantidade = self.request.POST.get('quantidade')
         subgrupo = self.request.POST.get('subgrupo')
+        preco = self.request.POST.get('preco')
 
         filtros = {}
 
@@ -396,6 +397,8 @@ class EditarProduto(View):
             filtros['quantidade'] = quantidade
         if subgrupo:
             filtros['subgrupo'] = subgrupo
+        if preco:
+            filtros['preco'] = preco
 
         try:
             core.models.Produto.objects.filter(pk=id_produto).update(**filtros)
@@ -404,6 +407,18 @@ class EditarProduto(View):
             msg = str(e)
 
         return JsonResponse(msg, safe=False)
+
+class ViewEditarProduto(View):
+    def get(self, *args, **kwargs):
+        id_produto = self.kwargs['id_produto']
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+
+        context = {
+            'produto': produto,
+        }
+
+        return render(request=self.request, template_name='editar_produto.html', context=context)
 
 class RemoverQuantidadeProduto(View):
     def post(self, *args, **kwargs):

@@ -34,6 +34,7 @@
         <th>Preço</th>
         <th>Adicionar Quantidade</th>
         <th>Retirar Quantidade</th>
+        <th>Editar</th>
 
         {% for i in lista_produtos %}
             <tr>
@@ -48,6 +49,11 @@
                 </td>
                 <td>
                     <button type="button" class="btn btn-dark" onclick="removerQtdProduto({{ i.id }})" id="idProduto" value={{ i.id }}>-</button>
+                </td>
+                <td>
+                    <button class="btn btn-dark">
+                        <a href="{% url 'view_editar_produto' i.id %}">Editar</a>
+                    </button>
                 </td>
             </tr>
         {% endfor %}

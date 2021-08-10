@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+    <h2>Editar Produto</h2>
+    <div class="cadastroProduto">
+        <form method="post" id="formCadastroProdutoEdicao" name="formCadastroProdutoEdicao">
+            {% csrf_token %}
+            <label for="nomeProdutoEdicao">Nome: </label>
+            <input type="text" required="" maxlength="150" id="nomeProdutoEdicao" name="nomeProdutoEdicao" value="{{ produto.nome }}">
+
+            <label for="quantidadeProdutoEdicao">Quantidade: </label>
+            <input type="number" required="" maxlength="50" id="quantidadeProdutoEdicao" name="quantidadeProdutoEdicao" value="{{ produto.quantidade }}"><br><br>
+
+            <label for="grupoProdutoEdicao">Grupo: </label>
+            <input type="text" required="" id="grupoProdutoEdicao" name="grupoProdutoEdicao" value="{{ produto.grupo }}">
+
+            <label for="subgrupoProdutoEdicao">Subgrupo: </label>
+            <input type="text" required="" id="subgrupoProdutoEdicao" name="subgrupoProdutoEdicao" value="{{ produto.subgrupo }}">
+
+            <label for="precoProdutoEdicao">Preço: </label>
+            <input type="number" required="" id="precoProdutoEdicao" name="precoProdutoEdicao" value="{{ produto.preco }}">
+
+            <button type="button" onclick="$('#formCadastroProdutoEdicao').submit()" id="enviarDadosProdutoEdicao">Enviar</button>
+        </form>
+    </div>
+
+    {% block javascript %}
+        <script>
+            $('#formCadastroProdutoEdicao').on('submit', function (e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                nome = $('#nomeProdutoEdicao').val();
+                quantidade = $('#quantidadeProdutoEdicao').val();
+                grupo = $('#grupoProdutoEdicao').val();
+                subgrupo = $('#subgrupoProdutoEdicao').val();
+                preco = $('#precoProdutoEdicao').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'editar_produto' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'id_produto': {{ produto.id }},
+                        'nome': nome,
+                        'quantidade': quantidade,
+                        'grupo': grupo,
+                        'subgrupo': subgrupo,
+                        'preco': preco,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}
+{% endblock %}
