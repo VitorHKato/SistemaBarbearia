@@ -1,11 +1,72 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-    <h2>Cadastrar Funcionário</h2>
-
+    <h2>Editar Funcionário</h2>
+    <div class="editarFuncionario">
+        <form method="post" id="formEditarFuncionario" name="formEditarFuncionario">
+        {% csrf_token %}
+        <label for="nomeFuncionarioEdicao">Nome: </label>
+        <input type="text" maxlength="150" id="nomeFuncionarioEdicao" name="nomeFuncionarioEdicao" value="{{ funcionario.nome }}" disabled>
+        <label for="sobrenomeFuncionarioEdicao">Sobrenome: </label>
+        <input type="text" maxlength="200" id="sobrenomeFuncionarioEdicao" name="sobrenomeFuncionarioEdicao" value="{{ funcionario.sobrenome }}" disabled><br><br>
+        <label for="dataNascimentoFuncionarioEdicao">Data de nascimento: </label>
+        <input type="date" id="dataNascimentoFuncionarioEdicao" name="dataNascimentoFuncionarioEdicao" value="{{ dt_nascimento }}" disabled>
+        <label for="situacaoFuncionarioEdicao">Situação: </label>
+        <select id="situacaoFuncionarioEdicao" name="situacaoFuncionarioEdicao">
+            {% for i in situacoes %}
+                {% if i == funcionario.situacao %}
+                    <option selected value= {{ i }}>{{ i }}</option>
+                {% else %}
+                    <option value= {{ i }}>{{ i }}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br><br>
+        <label for="salariofixoFuncionarioEdicao">Salário fixo: R$</label>
+        <input type="number" step="100" id="salariofixoFuncionarioEdicao" name="salariofixoFuncionarioEdicao" value="{{ funcionario.salario_fixo }}">
+        <label for="cargoFuncionarioEdicao">Cargo: </label>
+        <input type="text" id="cargoFuncionarioEdicao" name="cargoFuncionarioEdicao" value="{{ funcionario.cargo }}"><br><br>
+        <button type="button" onclick="$('#formEditarFuncionario').submit()" id="enviarDadosFuncionarioEdicao">Enviar</button>
+    </form>
+    </div>
 
     {% block javascript %}
         <script>
+            $('#formEditarFuncionario').on('submit', function (e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                nome = $('#nomeFuncionarioEdicao').val();
+                sobrenome = $('#sobrenomeFuncionarioEdicao').val();
+
+                date = new Date($('#dataNascimentoFuncionarioEdicao').val());
+                dia = date.getDate() + 1;
+                mes = date.getMonth() + 1;
+                ano = date.getFullYear();
+                dataNascimento = [dia, mes, ano].join('/');
+
+                situacao = $('#situacaoFuncionarioEdicao').val();
+                salarioFixo = $('#salariofixoFuncionarioEdicao').val();
+                cargo = $('#cargoFuncionarioEdicao').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'editar_funcionario' %}',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'id_funcionario': {{ funcionario.id }},
+                        'situacao': situacao,
+                        'salario_fixo': salarioFixo,
+                        'cargo': cargo,
+                    },
+                    dataType: 'json',
+                    success: function (context){
+                        location.reload();
+                        toastr.success(context.msg);
+                    },
+                    error: function (context){
+                        toastr.error(context.msg)
+                    }
+                });
+            });
         </script>
 
     {% endblock %}

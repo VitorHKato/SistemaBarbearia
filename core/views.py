@@ -198,11 +198,23 @@ class ViewEditarFuncionario(View):
     def get(self, *args, **kwargs):
         id_produto = self.kwargs['id_produto']
 
-        context = {
+        funcionario = core.models.Funcionario.objects.filter(pk=id_produto).first()
 
+        situacoes = ['TRABALHANDO', 'FÉRIAS', 'AFASTADO', 'LICENÇA']
+
+        try:
+            dt_nascimento = str(funcionario.dt_nascimento).split('-')
+            dt_nascimento_formatada = dt_nascimento[0] + '-' + dt_nascimento[1] + '-' + dt_nascimento[2]
+        except:
+            dt_nascimento_formatada = None
+
+        context = {
+            'funcionario': funcionario,
+            'situacoes': situacoes,
+            'dt_nascimento': dt_nascimento_formatada,
         }
 
-        return render(request=self.request, template_name='gerenciar_tarefas.html', context=context)
+        return render(request=self.request, template_name='editar_funcionario.html', context=context)
 
 class GerenciarServicos(View):
     def get(self, *args, **kwargs):
