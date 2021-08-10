@@ -28,6 +28,7 @@
         <th>Valor</th>
         <th>Comissão</th>
         <th>Duração</th>
+        <th>Editar</th>
 
         {% for i in lista_servicos %}
             <tr>
@@ -36,6 +37,11 @@
                 <td>{{ i.valor }}</td>
                 <td>{{ i.comissao }}</td>
                 <td>{{ i.duracao }}</td>
+                <td>
+                    <button class="btn btn-dark">
+                        <a href="{% url 'view_editar_servico' i.id %}">Editar</a>
+                    </button>
+                </td>
             </tr>
         {% endfor %}
     </table>

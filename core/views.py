@@ -63,14 +63,14 @@ class Home(View):
 
 class GerenciarFuncionarios(View):
     def get(self, *args, **kwargs):
-        funcionarios = core.models.Funcionario.objects.filter(status=True)
+        funcionarios = core.models.Funcionario.objects.filter(status=True).order_by('pk')
         data_atual = datetime.datetime.now().date()
 
         data_string = str(data_atual).split('-')
         anomes = data_string[0] + data_string[1]
 
         #Salários pagos referente ao mês anterior
-        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, anomes=anomes))
+        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, anomes=anomes).order_by('funcionario__id'))
 
         lista_funcionarios = []
         for i in funcionarios:
@@ -219,7 +219,7 @@ class ViewEditarFuncionario(View):
 class GerenciarServicos(View):
     def get(self, *args, **kwargs):
 
-        servicos = core.models.Servicos.objects.filter(status=True)
+        servicos = core.models.Servicos.objects.filter(status=True).order_by('pk')
 
         lista_servicos = []
         for i in servicos:
@@ -302,6 +302,18 @@ class EditarServico(View):
             msg = str(e)
 
         return JsonResponse(msg, safe=False)
+
+class ViewEditarServico(View):
+    def get(self, *args, **kwargs):
+        id_produto = self.kwargs['id_servico']
+
+        servico = core.models.Servicos.objects.filter(pk=id_produto).first()
+
+        context = {
+            'servico': servico,
+        }
+
+        return render(request=self.request, template_name='editar_servico.html', context=context)
 
 class GerenciarProdutos(View):
     def get(self, *args, **kwargs):
