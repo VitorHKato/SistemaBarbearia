@@ -49,26 +49,28 @@ class Home(View):
                 'horario_fim': i.horario_fim + 'h' if i.horario_fim else '---',
                 'data': i.data if i.data else '---',
                 'realizado': 'Sim' if i.realizado else 'Não',
+                'realizado_checkbox': i.realizado,
             }
             lista_tarefas_agendadas.append(a)
 
         context = {
             'Titulo': "Barbearia do Jow",
             'lista_tarefas_agendadas': lista_tarefas_agendadas,
+            'true': True,
         }
 
         return render(request=self.request, template_name='index.html', context=context)
 
 class GerenciarFuncionarios(View):
     def get(self, *args, **kwargs):
-        funcionarios = core.models.Funcionario.objects.filter(status=True)
+        funcionarios = core.models.Funcionario.objects.filter(status=True).order_by('pk')
         data_atual = datetime.datetime.now().date()
 
         data_string = str(data_atual).split('-')
         anomes = data_string[0] + data_string[1]
 
         #Salários pagos referente ao mês anterior
-        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, anomes=anomes))
+        salarios_mensais = list(core.models.SalarioMensal.objects.filter(status=True, anomes=anomes).order_by('funcionario__id'))
 
         lista_funcionarios = []
         for i in funcionarios:
@@ -192,10 +194,32 @@ class EditarFuncionario(View):
 
         return JsonResponse(msg, safe=False)
 
+class ViewEditarFuncionario(View):
+    def get(self, *args, **kwargs):
+        id_produto = self.kwargs['id_produto']
+
+        funcionario = core.models.Funcionario.objects.filter(pk=id_produto).first()
+
+        situacoes = ['TRABALHANDO', 'FÉRIAS', 'AFASTADO', 'LICENÇA']
+
+        try:
+            dt_nascimento = str(funcionario.dt_nascimento).split('-')
+            dt_nascimento_formatada = dt_nascimento[0] + '-' + dt_nascimento[1] + '-' + dt_nascimento[2]
+        except:
+            dt_nascimento_formatada = None
+
+        context = {
+            'funcionario': funcionario,
+            'situacoes': situacoes,
+            'dt_nascimento': dt_nascimento_formatada,
+        }
+
+        return render(request=self.request, template_name='editar_funcionario.html', context=context)
+
 class GerenciarServicos(View):
     def get(self, *args, **kwargs):
 
-        servicos = core.models.Servicos.objects.filter(status=True)
+        servicos = core.models.Servicos.objects.filter(status=True).order_by('pk')
 
         lista_servicos = []
         for i in servicos:
@@ -279,6 +303,18 @@ class EditarServico(View):
 
         return JsonResponse(msg, safe=False)
 
+class ViewEditarServico(View):
+    def get(self, *args, **kwargs):
+        id_servico = self.kwargs['id_servico']
+
+        servico = core.models.Servicos.objects.filter(pk=id_servico).first()
+
+        context = {
+            'servico': servico,
+        }
+
+        return render(request=self.request, template_name='editar_servico.html', context=context)
+
 class GerenciarProdutos(View):
     def get(self, *args, **kwargs):
 
@@ -349,6 +385,7 @@ class EditarProduto(View):
         grupo = self.request.POST.get('grupo')
         quantidade = self.request.POST.get('quantidade')
         subgrupo = self.request.POST.get('subgrupo')
+        preco = self.request.POST.get('preco')
 
         filtros = {}
 
@@ -360,6 +397,8 @@ class EditarProduto(View):
             filtros['quantidade'] = quantidade
         if subgrupo:
             filtros['subgrupo'] = subgrupo
+        if preco:
+            filtros['preco'] = preco
 
         try:
             core.models.Produto.objects.filter(pk=id_produto).update(**filtros)
@@ -368,6 +407,18 @@ class EditarProduto(View):
             msg = str(e)
 
         return JsonResponse(msg, safe=False)
+
+class ViewEditarProduto(View):
+    def get(self, *args, **kwargs):
+        id_produto = self.kwargs['id_produto']
+
+        produto = core.models.Produto.objects.filter(pk=id_produto).first()
+
+        context = {
+            'produto': produto,
+        }
+
+        return render(request=self.request, template_name='editar_produto.html', context=context)
 
 class RemoverQuantidadeProduto(View):
     def post(self, *args, **kwargs):
@@ -467,5 +518,25 @@ class AgendarTarefa(View):
         }
 
         return JsonResponse(context, safe=False)
+
+class AvaliarTarefa(View):
+    def post(self, *args, **kwargs):
+        id_tarefa = self.request.POST.get('id_tarefa')
+        avaliacao = self.request.POST.get('avaliacao')
+
+        tarefa = core.models.TarefasAgendadas.objects.filter(pk=id_tarefa).first()
+
+        if tarefa:
+            if avaliacao == 'true':
+                tarefa.realizado = True
+            else:
+                tarefa.realizado = False
+            tarefa.save()
+
+            msg = 'Tarefa avaliada com sucesso.'
+        else:
+            msg = 'Tarefa não encontrada.'
+
+        return JsonResponse(msg, safe=False)
 
 #TODO: Ao agendar tarefa, colocar na função para incrementar a comissao do funcionário e da renda mensal
