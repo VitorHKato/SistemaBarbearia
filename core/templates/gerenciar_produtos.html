@@ -48,7 +48,8 @@
                     <button type="button" class="btn btn-dark" onclick="adicionarQtdProduto({{ i.id }})" id="idProduto" value={{ i.id }}>+</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-dark" onclick="removerQtdProduto({{ i.id }})" id="idProduto" value={{ i.id }}>-</button>
+                    <button type="button" class="btn btn-dark" onclick="removerQtdProduto({{ i.id }})" id="idProduto" value={{ i.id }}
+                    {% if i.quantidade <= 0  %} disabled {% endif %}>-</button>
                 </td>
                 <td>
                     <button class="btn btn-dark">

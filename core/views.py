@@ -325,7 +325,7 @@ class GerenciarProdutos(View):
             a = {
                 'id': i.id,
                 'nome': i.nome if i.nome else '---',
-                'quantidade': i.quantidade if i.quantidade else '---',
+                'quantidade': i.quantidade if i.quantidade else 0,
                 'grupo': i.grupo if i.grupo else '---',
                 'subgrupo': i.subgrupo if i.subgrupo else '---',
                 'preco': 'R$ ' + str(i.preco) if i.preco else '---',
@@ -426,9 +426,12 @@ class RemoverQuantidadeProduto(View):
 
         produto = core.models.Produto.objects.filter(pk=id_produto).first()
         if produto:
-            produto.quantidade = produto.quantidade - 1
-            produto.save()
-            msg = 'Removido um produto.'
+            if produto.quantidade > 0:
+                produto.quantidade = produto.quantidade - 1
+                produto.save()
+                msg = 'Removido um produto.'
+            else:
+                msg = 'Não há produtos em estoque.'
         else:
             msg = 'Não foi possível encontrar o produto.'
 
