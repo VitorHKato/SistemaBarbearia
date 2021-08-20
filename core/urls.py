@@ -7,6 +7,8 @@ from core.views import Home, GerenciarFuncionarios, GerenciarServicos, Gerenciar
 
 urlpatterns = [
     # path('', Login.as_view(), name='login'),
+    #TODO: Fazer a validação via form action POST
+
     # path('validar_login', ValidarLogin.as_view(), name='validar_login'),
 
     # path('valida_nome', ValidaNome.as_view(), name='valida_nome'),
