@@ -32,8 +32,10 @@
     {% endblock %}
 
     {% block content %}
+    <h2>Barbearia do Jow</h2>
+
     <div class="login" style="vertical-align: middle">
-        <form method="post" id="formLogin" name="formLogin">
+        <form action="{% url 'validar_login' %}" method="post" id="formLogin" name="formLogin">
             {% csrf_token %}
             <label for="usuario">Usuário: </label>
             <input type="text" required="" maxlength="50" id="usuario" name="usuario">
@@ -51,31 +53,31 @@
     {% endblock %}
 
     {% block javascript %}
-        <script>
-            $('#formLogin').on('submit', function (e){
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                usuario = $('#usuario').val();
-                senha = $('#senha').val();
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url 'validar_login' %}',
-                    data: {
-                        'csrfmiddlewaretoken': '{{ csrf_token }}',
-                        'usuario': usuario,
-                        'senha': senha,
-                    },
-                    dataType: 'json',
-                    success: function (context){
-                        location.reload();
-                        toastr.success(context.msg);
-                    },
-                    error: function (context){
-                        toastr.error(context.msg)
-                    }
-                });
-            });
-        </script>
+{#        <script>#}
+{#            $('#formLogin').on('submit', function (e){#}
+{#                e.preventDefault();#}
+{#                e.stopImmediatePropagation();#}
+{#                usuario = $('#usuario').val();#}
+{#                senha = $('#senha').val();#}
+{#                $.ajax({#}
+{#                    type: 'POST',#}
+{#                    url: '{% url 'validar_login' %}',#}
+{#                    data: {#}
+{#                        'csrfmiddlewaretoken': '{{ csrf_token }}',#}
+{#                        'usuario': usuario,#}
+{#                        'senha': senha,#}
+{#                    },#}
+{#                    dataType: 'json',#}
+{#                    success: function (context){#}
+{#                        location.reload();#}
+{#                        toastr.success(context.msg);#}
+{#                    },#}
+{#                    error: function (context){#}
+{#                        toastr.error(context.msg)#}
+{#                    }#}
+{#                });#}
+{#            });#}
+{#        </script>#}
 
     {% endblock %}
 </body>

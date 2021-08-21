@@ -6,14 +6,13 @@ from core.views import Home, GerenciarFuncionarios, GerenciarServicos, Gerenciar
     AdicionarQuantidadeProduto, ViewEditarFuncionario, AvaliarTarefa, ViewEditarServico, ViewEditarProduto
 
 urlpatterns = [
-    # path('', Login.as_view(), name='login'),
-    #TODO: Fazer a validação via form action POST
+    path('', Login.as_view(), name='login'),
 
-    # path('validar_login', ValidarLogin.as_view(), name='validar_login'),
+    path('validar_login', ValidarLogin.as_view(), name='validar_login'),
 
     # path('valida_nome', ValidaNome.as_view(), name='valida_nome'),
 
-    path('', Home.as_view(), name='index'),
+    path('home', Home.as_view(), name='index'),
     # path('redirect', Redirect.as_view(), name='redirect'),
 
     path('gerenciar_produtos', GerenciarProdutos.as_view(), name='gerenciar_produtos'),

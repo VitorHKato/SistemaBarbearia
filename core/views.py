@@ -20,7 +20,7 @@ class ValidarLogin(View):
         if core.models.Usuario.objects.filter(usuario=usuario, senha=senha).exists():
             return redirect('index')
         else:
-            return {'msg': 'Usuário inválido.'}
+            return JsonResponse({'msg': 'Usuario invalido.'}, safe=False)
 
 class ValidaNome(View):
     def get(self, *args, **kwargs):
