@@ -13,11 +13,36 @@ class Login(View):
         return render(request=self.request, template_name='login.html')
 
 class ValidarLogin(View):
+    def criptografar_senha(self, senha=None, *args, **kwargs):
+        nova_senha = ''
+
+        if senha:
+            for i in senha:
+                novo_char = ord(i) + 5
+                nova_senha += str(chr(novo_char))
+
+        return nova_senha
+
+    def descriptografar_senha(self, senha=None, *args, **kwargs):
+        senha_original = ''
+
+        if senha:
+            for i in senha:
+                char = ord(i) - 5
+                senha_original += str(chr(char))
+
+        return senha_original
+
     def post(self, *args, **kwargs):
         usuario = self.request.POST.get('usuario')
         senha = self.request.POST.get('senha')
 
-        if core.models.Usuario.objects.filter(usuario=usuario, senha=senha).exists():
+        # nova_senha = self.criptografar_senha(senha=senha)
+        # senha_original = self.descriptografar_senha(senha=nova_senha)
+
+        senha_criptografada = self.criptografar_senha(senha=senha)
+
+        if core.models.Usuario.objects.filter(usuario=usuario, senha=senha_criptografada).exists():
             return redirect('index')
         else:
             return JsonResponse({'msg': 'Usuario invalido.'}, safe=False)
