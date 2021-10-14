@@ -168,7 +168,7 @@ class CriarFuncionario(View):
                 sobrenome=sobrenome,
                 dt_nascimento=data_nascimento,
                 situacao=situacao,
-                salario_fixo=salario_fixo,
+                salario_fixo=salario_fixo if salario_fixo is not '' else 0,
                 cargo=cargo,
             ).save()
 
