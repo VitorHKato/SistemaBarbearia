@@ -1,1 +1,1 @@
-web gunicorn SistemaBarbeariaDjango.wsgi
+web: gunicorn SistemaBarbeariaDjango.wsgi
